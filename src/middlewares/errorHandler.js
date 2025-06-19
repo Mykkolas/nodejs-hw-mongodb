@@ -1,6 +1,6 @@
 import { HttpError } from 'http-errors';
 
-export const errorHandler = async (err, req, res, next) => {
+export const errorHandler = /* async */ (err, req, res, next) => {
     const { status, message } = err;
     if (err instanceof HttpError) {
         res.status(status).json({
