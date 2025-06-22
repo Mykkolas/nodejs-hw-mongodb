@@ -14,7 +14,7 @@ router.use(authenticate);
 
 router.get('/', ctrlWrapper(getAllContactsController));
 
-router.get('/:contactId',
+router.get('/:id',
     isValidId,
     ctrlWrapper(getContactByIdController));
 
@@ -22,12 +22,12 @@ router.post('/',
     validateBody(createContactSchema), /* EXPRESS passes req.body automaticallys */
     ctrlWrapper(createContactController));
 
-router.patch('/:contactId',
+router.patch('/:id',
     isValidId,
     validateBody(updateContactSchema),
     ctrlWrapper(updateContactController));
 
-router.delete('/:contactId',
+router.delete('/:id',
     isValidId,
     ctrlWrapper(deleteContactController));
 
