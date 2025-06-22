@@ -7,7 +7,8 @@ export const getAllContacts = async ({
     perPage = 10,
     sortOrder = SORT_ORDER.ASC,
     sortBy = '_id',
-    filter = {} // default
+    filter = {}, // default
+    userId
 }) => {
     const limit = perPage;
     const skip = (page - 1) * perPage; // tells how many i will skip with request
@@ -19,6 +20,8 @@ export const getAllContacts = async ({
     if (typeof filter.isFavourite === 'boolean') {
         contactsQuery.where('isFavourite').equals(filter.isFavourite);
     }
+
+    contactsQuery.where('userId').equals(userId);
 
     const [contactsCount, contacts] = await Promise.all([
         ContactsCollection.find().merge(contactsQuery).countDocuments(),
@@ -38,8 +41,8 @@ export const getAllContacts = async ({
         ;
 };
 
-export const getContactById = async (contactId) => {
-    const contact = await ContactsCollection.findById(contactId);
+export const getContactById = async ({ _id, userId }) => {
+    const contact = await ContactsCollection.findOne({ _id, userId });
     return contact;
 };
 
@@ -48,9 +51,9 @@ export const createContact = async (payload) => {
     return contact;
 };
 
-export const updateContact = async (contactId, payload, options = {}) => {
+export const updateContact = async ({ _id, userId }, payload, options = {}) => {
     const rawResult = await ContactsCollection.findOneAndUpdate(
-        { _id: contactId },
+        { _id, userId },
         payload,
         {
             new: true,
@@ -66,9 +69,10 @@ export const updateContact = async (contactId, payload, options = {}) => {
     };
 };
 
-export const deleteContact = async (contactId) => {
+export const deleteContact = async ({ _id, userId }) => {
     const contact = await ContactsCollection.findOneAndDelete({
-        _id: contactId,
+        _id,
+        userId
     });
     console.log("Important!!!", contact);
     return contact;
