@@ -5,6 +5,7 @@ import { validateBody } from "../middlewares/validateBody.js";
 import { createContactSchema, updateContactSchema } from "../validation/contacts.js";
 import { isValidId } from "../middlewares/isValidId.js";
 import { authenticate } from "../middlewares/authenticate.js";
+import { upload } from "../middlewares/multer.js";
 
 
 
@@ -19,11 +20,13 @@ router.get('/:id',
     ctrlWrapper(getContactByIdController));
 
 router.post('/',
-    validateBody(createContactSchema), /* EXPRESS passes req.body automaticallys */
+    upload.single('photo'),
+    validateBody(createContactSchema), /* EXPRESS passes req.body automatically */
     ctrlWrapper(createContactController));
 
 router.patch('/:id',
     isValidId,
+    upload.single('photo'),
     validateBody(updateContactSchema),
     ctrlWrapper(updateContactController));
 
