@@ -1,18 +1,19 @@
-//@ts-nocheck
 
 import nodemailer from 'nodemailer';
 
-import { SMTP } from '../constants/index.js';
 import getEnvVar from './getEnvVar.js';
 
 const transporter = nodemailer.createTransport({
-    host: getEnvVar(SMTP.SMTP_HOST),
-    port: Number(getEnvVar(SMTP.SMTP_PORT)),
+    host: getEnvVar("SMTP_HOST"),
+    port: Number(getEnvVar("SMTP_PORT")),
     auth: {
-        user: getEnvVar(SMTP.SMTP_USER),
-        pass: getEnvVar(SMTP.SMTP_PASSWORD),
+        user: getEnvVar("SMTP_USER"),
+        pass: getEnvVar("SMTP_PASSWORD"),
     },
 });
+/* const check = getEnvVar("SMTP_HOST");
+console.log(check); */
+
 
 export const sendEmail = async (options) => {
     return await transporter.sendMail(options);
