@@ -3,7 +3,7 @@ import { UsersCollection } from "../db/models/users.js";
 import bcrypt from "bcrypt";
 import { SessionsCollection } from "../db/models/sessions.js";
 import { randomBytes } from "crypto";
-import { FIFTEEN_MINUTES, SMTP_FROM, TEMPLATES_DIR, THIRTY_DAYS } from "../constants/index.js";
+import { FIFTEEN_MINUTES, TEMPLATES_DIR, THIRTY_DAYS } from "../constants/index.js";
 import getEnvVar from "../utils/getEnvVar.js";
 import { sendEmail } from "../utils/sendMail.js";
 import jwt from 'jsonwebtoken';
@@ -124,7 +124,7 @@ export const requestResetToken = async (email) => {
 
     try {
         await sendEmail({
-            from: getEnvVar(SMTP_FROM),
+            from: getEnvVar("SMTP_FROM"),
             to: email,
             subject: 'Reset your password',
             html
