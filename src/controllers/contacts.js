@@ -3,6 +3,7 @@ import { createContact, deleteContact, getAllContacts, getContactById, updateCon
 import { parsePaginationParams } from "../utils/parsePaginationParams.js";
 import { parseSortParams } from "../utils/parseSortParams.js";
 import { parseFilterParams } from "../utils/parseFilterParams.js";
+import { saveFileToCloudinary } from "../utils/saveFileToCloudinary.js";
 
 
 export const getAllContactsController = async (req, res) => {
@@ -47,8 +48,15 @@ export const getContactByIdController = async (req, res) => {
 };
 
 export const createContactController = async (req, res) => {
+    const photo = req.file;
+    let photoUrl;
+    if (photo) {
+        photoUrl = await saveFileToCloudinary(photo);
+    }
+
     const contact = await createContact({
         ...req.body,
+        photo: photoUrl,
         userId: req.user._id
     });
 
@@ -61,10 +69,15 @@ export const createContactController = async (req, res) => {
 
 export const updateContactController = async (req, res) => {
     const { id } = req.params;
+    const photo = req.file;
+    let photoUrl;
+    if (photo) {
+        photoUrl = await saveFileToCloudinary(photo);
+    }
 
     const result = await updateContact(
         { _id: id, userId: req.user._id },
-        req.body,
+        { ...req.body, photo: photoUrl },
         { upsert: true },
     );
     if (!result) {
