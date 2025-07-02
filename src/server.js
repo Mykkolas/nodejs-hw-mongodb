@@ -6,13 +6,14 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js';
 import cookieParser from "cookie-parser";
-import dotenv from 'dotenv';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
+/* import dotenv from 'dotenv'; */
 
 export const setupServer = () => {
     const app = express();
     const PORT = Number(getEnvVar('PORT', 3000));
     app.use(cors());
-    dotenv.config();
+    /* dotenv.config(); */
     app.use(cookieParser());
     app.use(
         express.json({
@@ -27,8 +28,8 @@ export const setupServer = () => {
             }
         })
     );
-
     app.use(router); // for my own routes
+    app.use('/api-docs', swaggerDocs());
 
     app.use(notFoundHandler);
     app.use(errorHandler);
