@@ -6,6 +6,7 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js';
 import cookieParser from "cookie-parser";
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 /* import dotenv from 'dotenv'; */
 
 export const setupServer = () => {
@@ -27,8 +28,8 @@ export const setupServer = () => {
             }
         })
     );
-
     app.use(router); // for my own routes
+    app.use('/api-docs', swaggerDocs());
 
     app.use(notFoundHandler);
     app.use(errorHandler);
